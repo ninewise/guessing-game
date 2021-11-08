@@ -10,7 +10,8 @@ main = do
 gameloop :: StdGen -> IO ()
 gameloop stdGen = do
   let (number, stdGen') = randomR (0, 100) stdGen
-  guessloop number =<< askNumber
+  guess <- askNumber
+  guessloop number guess
   gameloop stdGen'
 
 askNumber :: IO Int
@@ -23,6 +24,6 @@ guessloop target guess
   | otherwise = putStrLn "Congratulations!"
                         
 retry :: Int -> String -> IO ()
-retry target dir = do
-  putStr $ "Guess a " ++ dir ++ " number... "
-  guessloop target =<< askNumber
+retry target dir = putStr ("Guess a " ++ dir ++ " number... ")
+                >> askNumber
+               >>= guessloop target
